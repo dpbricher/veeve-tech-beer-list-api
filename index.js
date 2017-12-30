@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+// version v8.9.3
 (function() {
   'use strict';
 
