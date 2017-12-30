@@ -17,6 +17,8 @@
     res.send(req.query.reverse ? db.getRecordListReverse() : db.getRecordList());
   });
 
+  app.get('/user-list', (req, res)=> res.send(db.getUserList()));
+
   app.post('/create', (req, res)=> {
     let success = true;
 
