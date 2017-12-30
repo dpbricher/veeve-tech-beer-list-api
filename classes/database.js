@@ -5,20 +5,31 @@
   const path  = require('path');
 
   class Database {
-    constructor() {
-      this.recordDir  = './records';
+    constructor(dataRoot) {
+      this.dataRoot = dataRoot || `${__dirname}/../data`;
+      this.recordDir  = `${this.dataRoot}/records`;
+      this.userDir  = `${this.dataRoot}/users`;
 
-      if (!fs.existsSync(this.recordDir))
-        fs.mkdirSync(this.recordDir);
+      [this.dataRoot, this.recordDir, this.userDir].forEach(dir => {
+        if (!fs.existsSync(dir))
+          fs.mkdirSync(dir);
+      });
     }
 
     listRecords() {
       return fs.readdirSync(this.recordDir);
     }
 
+    listUsers() {
+      return fs.readdirSync(this.userDir);
+    }
+
     createRecord(data) {
-      fs.writeFileSync(path.join(this.recordDir,
-        `${new Date().toISOString()}.json`), JSON.stringify(data));
+      this._createFile(this.recordDir, data);
+    }
+
+    createUser(data) {
+      this._createFile(this.userDir, data);
     }
 
     getRecordList() {
@@ -34,8 +45,24 @@
       return list;
     }
 
+    getUserList() {
+      return this.listUsers().map(i => this._getUserFile(i));
+    }
+
+    _createFile(dir, data) {
+      fs.writeFileSync(path.join(dir, `${new Date().toISOString()}.json`), JSON.stringify(data));
+    }
+
     _getRecordFile(name) {
-      return JSON.parse(fs.readFileSync(path.join(this.recordDir, name)));
+      return this._getJsonFileContent(this.recordDir, name);
+    }
+
+    _getUserFile(name) {
+      return this._getJsonFileContent(this.userDir, name);
+    }
+
+    _getJsonFileContent(dir, name) {
+      return JSON.parse(fs.readFileSync(path.join(dir, name)));
     }
   }
 

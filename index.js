@@ -9,7 +9,7 @@
   const PORT    = 7331;
 
   let app       = express();
-  let db        = new Database();
+  let db        = new Database(`${__dirname}/data`);
 
   app.use(bodyParser.json());
 
