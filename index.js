@@ -64,5 +64,28 @@
       res.status(400).send('Missing one or more required parameters')
   });
 
+  app.post('/user/verify', (req, res)=> {
+    let { user, pass }  = req.body;
+
+    const failInvalid = ()=> res.status(400).send('Invalid user/pass combination');
+
+    if (user && pass) {
+      let userList  = db.getUserList();
+      let dbUser  = userList.find(i => i.name === user);
+
+      if (dbUser) {
+        let hash  = crypto.createHash(HASH_TYPE).update(pass).digest(DIGEST_TYPE);
+        let dbHash  = dbUser.pass;
+
+        if (crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(dbHash)))
+          res.status(200).send('Valid user/pass combination');
+        else
+          failInvalid();
+      } else
+        failInvalid();
+    } else
+      res.status(400).send('Missing one or more required parameters');
+  });
+
   app.listen(PORT, ()=> console.log(`listening on port ${PORT}`));
 })();
