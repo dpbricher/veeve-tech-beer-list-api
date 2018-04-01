@@ -27,4 +27,7 @@ COPY --from=builder /root/node_modules /root/node_modules
 ADD index.js .
 ADD classes classes
 
+ENV DATA_DIR=/srv/beer-list-data
+VOLUME ["/srv/beer-list-data"]
+
 CMD ["node", "/root/index.js"]

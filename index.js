@@ -9,9 +9,10 @@
   const Database  = require(`${__dirname}/classes/database`);
 
   const PORT    = 7331;
+  const DATA_DIR  = process.env.DATA_DIR || `${__dirname}/data`;
 
   let app       = express();
-  let db        = new Database(`${__dirname}/data`);
+  let db        = new Database(DATA_DIR);
 
   app.use(bodyParser.json());
 
