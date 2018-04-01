@@ -1,4 +1,2 @@
-.git/
+.git*
 node_modules/
-records/
-.gitignore
