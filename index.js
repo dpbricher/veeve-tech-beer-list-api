@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// version v8.9.3
+// version v8.11.1
 (function() {
   'use strict';
 
@@ -35,4 +35,13 @@
   });
 
   app.listen(PORT, ()=> console.log(`listening on port ${PORT}`));
+
+  ['SIGINT', 'SIGTERM'].forEach(signal =>
+    process.on(signal, ()=> onQuitSignal(signal))
+  );
+
+  function onQuitSignal(name) {
+    console.log(`received ${name}; exiting...`);
+    process.exit();
+  }
 })();
